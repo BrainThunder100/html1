@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>キャラクター登場</title>
+    <style>
+        html, body {
+            height: 100vh;
+            min-height: 100vh;
+        }
+        body {
+            background: url('ホーム画面.png') no-repeat center center;
+            background-size: cover;
+            background-attachment: fixed;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            font-family: 'Arial', sans-serif;
+        }
+        .character-area {
+            display: flex;
+            flex-direction: row;
+            align-items: flex-start;
+            justify-content: center;
+            margin-top: 80px;
+            gap: 32px;
+            padding: 0 16px;
+            flex-wrap: wrap;
+        }
+        .character-img {
+            width: 250px;
+            height: auto;
+            flex-shrink: 0;
+        }
+        .speech-bubble {
+            display: inline-block;
+            padding: 18px 28px;
+            border-radius: 24px;
+            background: rgba(240, 240, 240, 0.95);
+            color: #222;
+            font-size: 1.3em;
+            position: relative;
+            max-width: 420px;
+            text-align: left;
+            margin-top: 40px;
+            line-height: 1.6;
+            word-wrap: break-word;
+            word-break: break-word;
+        }
+        .speech-bubble::after {
+            content: "";
+            position: absolute;
+            left: -24px;
+            bottom: 24px;
+            width: 0;
+            height: 0;
+            border: 12px solid transparent;
+            border-right: 16px solid rgba(240, 240, 240, 0.95);
+        }
+        .start-button {
+            margin-top: 40px;
+            font-size: 1.2em;
+            padding: 15px 30px;
+            border-radius: 8px;
+            border: none;
+            background: #00aaff;
+            color: #fff;
+            cursor: pointer;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            transition: background 0.2s;
+        }
+        .start-button:hover {
+            background: #0088cc;
+        }
+        .start-button:active {
+            transform: scale(0.98);
+        }
+
+        /* タブレット用（768px以下） */
+        @media (max-width: 768px) {
+            .character-area {
+                margin-top: 60px;
+                gap: 24px;
+                flex-direction: column;
+                align-items: center;
+            }
+            .character-img {
+                width: 200px;
+            }
+            .speech-bubble {
+                max-width: 320px;
+                font-size: 1.1em;
+                margin-top: 20px;
+                padding: 16px 24px;
+            }
+            .speech-bubble::after {
+                left: 50%;
+                bottom: -16px;
+                transform: translateX(-50%);
+                border: 12px solid transparent;
+                border-top: 16px solid rgba(240, 240, 240, 0.95);
+            }
+            .start-button {
+                font-size: 1.1em;
+                padding: 12px 24px;
+                margin-top: 30px;
+            }
+        }
+
+        /* スマートフォン用（480px以下） */
+        @media (max-width: 480px) {
+            .character-area {
+                margin-top: 40px;
+                gap: 16px;
+                padding: 0 12px;
+                flex-direction: column-reverse;
+            }
+            .character-img {
+                width: 160px;
+            }
+            .speech-bubble {
+                max-width: 280px;
+                font-size: 0.95em;
+                margin-top: 0;
+                margin-bottom: 16px;
+                padding: 14px 20px;
+            }
+            .speech-bubble::after {
+                left: 50%;
+                top: auto;
+                bottom: -14px;
+                transform: translateX(-50%);
+                border: 10px solid transparent;
+                border-top: 14px solid rgba(240, 240, 240, 0.95);
+            }
+            .start-button {
+                font-size: 1em;
+                padding: 12px 24px;
+                margin-top: 24px;
+                width: 90%;
+                box-sizing: border-box;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div style="display: flex; flex-direction: column; align-items: center;">
+        <div class="character-area">
+            <img src="にこ.png" class="character-img" alt="にこ">
+            <div class="speech-bubble">
+                おかやま山陽高校探偵部の部員として、<br>
+                この謎を解き明かそう！
+            </div>
+        </div>
+        <button class="start-button" onclick="location.href='game.html'">ゲームを始める</button>
+    </div>
+</body>
+</html>

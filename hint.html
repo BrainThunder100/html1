@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ヒント</title>
+  <style>
+    /* =======================
+       ページ全体
+       ======================= */
+    body {
+      background: #fffbe6 url("ヒント背景.png") no-repeat center center fixed;
+      background-size: cover;
+      color: #333;
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 40px 10px;
+    }
+
+    h1 {
+      color: #eeff00;
+      margin-bottom: 24px;
+    }
+
+    /* =======================
+       吹き出し
+       ======================= */
+    .hint-box {
+      display: inline-block;
+      background: #fff;
+      border: 2px solid #ffe082;
+      border-radius: 16px;
+      padding: 32px 40px;
+      font-size: 1.4em;
+      color: #795548;
+      box-shadow: 2px 2px 12px rgba(0,0,0,0.08);
+      margin-top: 40px;
+      text-align: center;
+      position: relative;
+      transition: all 0.3s ease;
+    }
+
+    /* 吹き出しの口（PC時：左向き） */
+    .hint-box::before {
+      content: "";
+      position: absolute;
+      left: -32px;
+      bottom: 32px;
+      width: 0;
+      height: 0;
+      border-top: 18px solid transparent;
+      border-bottom: 18px solid transparent;
+      border-right: 32px solid #fff;
+      filter: drop-shadow(-2px 0 0 #ffe082);
+    }
+
+    /* =======================
+       キャラクター＋吹き出し配置
+       ======================= */
+    .hint-area {
+      display: flex;
+      flex-direction: row;
+      align-items: flex-end;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 40px;
+    }
+
+    .hint-area img {
+      width: 320px;
+      height: auto;
+    }
+
+    /* =======================
+       戻るボタン
+       ======================= */
+    .back-button {
+      padding: 12px 28px;
+      font-size: 1.1em;
+      color: #fff;
+      background-color: #2196f3;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      box-shadow: 1px 1px 6px rgba(0,0,0,0.08);
+      margin: 8px;
+    }
+
+    .back-button:hover {
+      background-color: #1565c0;
+    }
+
+    /* =======================
+       ★ スマホ対応部分 ★
+       吹き出しを上に移動＆口を下向きに
+       ======================= */
+    @media (max-width: 700px) {
+      .hint-area {
+        flex-direction: column; /* 縦並びに */
+        align-items: center;
+      }
+
+      /* 吹き出しを上にする（順番を変更） */
+      .hint-area > div.hint-box {
+        order: -1;
+        margin-bottom: 16px; /* キャラとの間の余白 */
+        margin-top: 0;
+      }
+
+      .hint-area img {
+        width: 220px;
+      }
+
+      .hint-box {
+        font-size: 1.2em;
+        padding: 24px 28px;
+      }
+
+      /* 吹き出しの口：下向きに変更（キャラを指す） */
+      .hint-box::before {
+        content: "";
+        position: absolute;
+        bottom: -32px; /* 吹き出しの下側に配置 */
+        left: 50%;
+        transform: translateX(-50%);
+        width: 0;
+        height: 0;
+        border-left: 18px solid transparent;
+        border-right: 18px solid transparent;
+        border-top: 32px solid #fff;
+        filter: drop-shadow(0 2px 0 #ffe082);
+      }
+    }
+  </style>
+</head>
+<body>
+  <h1>ヒント💡</h1>
+
+  <div class="hint-area">
+    <!-- キャラクター画像と名前 -->
+    <div style="display: flex; flex-direction: column; align-items: center;">
+      <span style="margin-bottom: 6px; font-size: 1.2em; color: #fff; font-weight: bold;">ミルタン</span>
+      <img src="ミルタン.png" alt="ミルタン">
+    </div>
+
+    <!-- 吹き出し -->
+    <div class="hint-box" id="hint-box">
+      僕がヒントを教えるよ
+    </div>
+  </div>
+
+  <!-- ヒントボタン -->
+  <div style="margin-top: 48px;">
+    <button class="back-button" onclick="showHint(1)">ヒント1</button>
+    <button class="back-button" onclick="showHint(2)">ヒント2</button>
+    <button class="back-button" onclick="showHint(3)">ヒント3</button>
+  </div>
+
+  <!-- 戻るボタン -->
+  <div style="margin-top: 24px;">
+    <button class="back-button" onclick="location.href='game.html';">戻る</button>
+  </div>
+
+  <script>
+    function showHint(num) {
+      const hintBox = document.getElementById('hint-box');
+      if (num === 1) {
+        hintBox.innerHTML = "発言は互いに「誰が嘘か」を指しあっているよ。<br>A→T、R→A、S→R のように繋がっているね。";
+      } else if (num === 2) {
+        hintBox.innerHTML = "「嘘つきは1人」という条件を忘れずに。<br>ある人を『真』と仮定したときに、他の人の発言が何人『嘘』になるかな？";
+      } else if (num === 3) {
+        hintBox.innerHTML = "Tさんは『私は嘘をついていない』って言ってるよね。<br>この言葉が本当かどうかを考えると、全体の矛盾が見えてくるよ！";
+      }
+    }
+  </script>
+</body>
+</html>

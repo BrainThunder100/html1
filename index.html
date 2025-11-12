@@ -1,0 +1,59 @@
+<!-- ドアが開く演出だけのindex.html例 -->
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>謎解きゲーム - タイトル画面</title>
+    <link rel="stylesheet" href="CSS/sample.css">
+    <style>
+        .door-title-with-bg { 
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .phantom {
+            position: fixed;
+            left: 50%;
+            top: 50%; /* 110%から70%に変更して上に移動。必要なら80%などさらに調整可能 */
+            transform: translate(-50%, -50%);
+            width: 160px;
+            height: auto;
+            opacity: 0;
+            z-index: 1;
+            transition: opacity 1s ease;
+        }
+
+        body.show-phantom .phantom {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+    <div class="door-title-with-bg">
+        <span class="door-title">サイバーブレイン・ミステリー</span>
+
+        <!-- 怪盗画像（ドアの背後に置く） -->
+        <img src="怪盗.png" alt="怪盗" class="phantom" id="phantom">
+
+        <!-- ドア画像（既存の設定を維持） -->
+        <img src="左扉.png" alt="左ドア" class="door-img-bg door-img-left">
+        <img src="右扉.png" alt="右ドア" class="door-img-bg door-img-right">
+    </div>
+
+    <script>
+        window.addEventListener('DOMContentLoaded', () => {
+            setTimeout(() => {
+                document.body.classList.add('door-open');
+                document.body.classList.add('show-phantom');
+                setTimeout(() => {
+                    location.href = 'character.html';
+                }, 1200);
+            }, 1000);
+        });
+    </script>
+</body>
+</html>

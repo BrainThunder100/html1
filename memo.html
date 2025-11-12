@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>メモ</title>
+    <style>
+        body {
+            background: url('メモ背景.png') no-repeat center center fixed;
+            background-size: cover;
+            color: #fff;
+            font-size: 1.2em;
+            margin: 0;
+            padding: 24px;
+        }
+        .memo-area {
+            max-width: 700px;
+            margin: 0 auto 32px auto;
+        }
+        textarea {
+            width: 100%;
+            height: 120px;
+            font-size: 1.2em;
+            box-sizing: border-box;
+            margin-bottom: 16px;
+        }
+        .canvas-area {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        canvas {
+            background: #fff;
+            border: 2px solid #888;
+            border-radius: 8px;
+            cursor: crosshair;
+        }
+        .canvas-controls {
+            margin: 8px 0 16px 0;
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+    </style>
+</head>
+<body>
+    <button onclick="location.href='game.html'" style="font-size:1.3em; padding:10px 24px; border-radius:8px; border:none; background:#444; color:#fff; margin-bottom:16px; cursor:pointer;">← ゲーム画面に戻る</button>
+    <div class="memo-area">
+        <label for="memo">メモ：</label><br>
+        <textarea id="memo" placeholder="ここに文字を書いてください"></textarea>
+        <button onclick="saveMemo()">保存</button>
+        <button onclick="clearMemo()">クリア</button>
+    </div>
+    <div class="canvas-area">
+        <div class="canvas-controls">
+            <label>色: <input type="color" id="color" value="#000000"></label>
+            <label>太さ: <input type="range" id="size" min="1" max="20" value="3"></label>
+            <button onclick="setEraser()" id="eraser-btn">消しゴム</button>
+            <button onclick="clearCanvas()">クリア</button>
+            <button onclick="saveCanvas()">ペイント保存</button>
+        </div>
+        <canvas id="paint" width="600" height="300"></canvas>
+    </div>
+    <script>
+        // メモ保存・復元
+        const memoKey = "memo-text";
+        const memoEl = document.getElementById('memo');
+        memoEl.value = localStorage.getItem(memoKey) || "";
+        function saveMemo() {
+            localStorage.setItem(memoKey, memoEl.value);
+            alert("メモを保存しました");
+        }
+        function clearMemo() {
+            document.getElementById('memo').value = "";
+            localStorage.removeItem('memo-text');
+        }
+
+        // ペイント機能
+        const canvas = document.getElementById('paint');
+        const ctx = canvas.getContext('2d');
+        let drawing = false;
+        let lastX = 0, lastY = 0;
+        let isEraser = false;
+        let eraserPreview = null;
+
+        // ペイントの保存・復元
+        const paintKey = "memo-paint";
+        // 復元
+        const savedImg = localStorage.getItem(paintKey);
+        if (savedImg) {
+            const img = new window.Image();
+            img.onload = function() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                ctx.drawImage(img, 0, 0);
+            };
+            img.src = savedImg;
+        }
+        function saveCanvas() {
+            const dataURL = canvas.toDataURL();
+            localStorage.setItem(paintKey, dataURL);
+            alert("ペイントを保存しました");
+        }
+
+        function getPos(e) {
+            if (e.touches) {
+                const rect = canvas.getBoundingClientRect();
+                return {
+                    x: e.touches[0].clientX - rect.left,
+                    y: e.touches[0].clientY - rect.top
+                };
+            } else {
+                return { x: e.offsetX, y: e.offsetY };
+            }
+        }
+
+        function startDraw(e) {
+            drawing = true;
+            const pos = getPos(e);
+            lastX = pos.x;
+            lastY = pos.y;
+        }
+        function draw(e) {
+            if (!drawing) return;
+            e.preventDefault();
+            const pos = getPos(e);
+            if (isEraser) {
+                ctx.strokeStyle = "#fff"; // 背景色で消す
+            } else {
+                ctx.strokeStyle = document.getElementById('color').value;
+            }
+            ctx.lineWidth = document.getElementById('size').value;
+            ctx.lineCap = "round";
+            ctx.beginPath();
+            ctx.moveTo(lastX, lastY);
+            ctx.lineTo(pos.x, pos.y);
+            ctx.stroke();
+            lastX = pos.x;
+            lastY = pos.y;
+        }
+        function endDraw() {
+            drawing = false;
+        }
+        function clearCanvas() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            localStorage.removeItem(paintKey);
+        }
+        function setEraser() {
+            isEraser = !isEraser;
+            const eraserBtn = document.getElementById('eraser-btn');
+            if (isEraser) {
+                eraserBtn.textContent = "ペンに戻す";
+                canvas.style.cursor = "none"; // カーソル非表示
+                if (!eraserPreview) {
+                    eraserPreview = document.createElement('div');
+                    eraserPreview.style.position = 'absolute';
+                    eraserPreview.style.pointerEvents = 'none';
+                    eraserPreview.style.border = '2px solid #888';
+                    eraserPreview.style.borderRadius = '50%';
+                    eraserPreview.style.background = 'rgba(255,255,255,0.3)';
+                    eraserPreview.style.zIndex = 1000;
+                    document.body.appendChild(eraserPreview);
+                }
+            } else {
+                eraserBtn.textContent = "消しゴム";
+                canvas.style.cursor = "crosshair";
+                if (eraserPreview) eraserPreview.style.display = "none";
+            }
+        }
+
+        // マウス位置に消しゴムプレビューを表示
+        canvas.addEventListener('mousemove', function(e) {
+            if (isEraser && eraserPreview) {
+                const rect = canvas.getBoundingClientRect();
+                const size = document.getElementById('size').value;
+                eraserPreview.style.width = size + "px";
+                eraserPreview.style.height = size + "px";
+                eraserPreview.style.left = (e.clientX - size/2) + "px";
+                eraserPreview.style.top = (e.clientY - size/2) + "px";
+                eraserPreview.style.display = "block";
+            } else if (eraserPreview) {
+                eraserPreview.style.display = "none";
+            }
+        });
+        canvas.addEventListener('mouseleave', function() {
+            if (eraserPreview) eraserPreview.style.display = "none";
+        });
+        document.getElementById('size').addEventListener('input', function() {
+            if (eraserPreview && isEraser) {
+                eraserPreview.style.width = this.value + "px";
+                eraserPreview.style.height = this.value + "px";
+            }
+        });
+
+        // マウス操作
+        canvas.addEventListener('mousedown', startDraw);
+        canvas.addEventListener('mousemove', draw);
+        canvas.addEventListener('mouseup', endDraw);
+        canvas.addEventListener('mouseleave', endDraw);
+
+        // タッチ操作
+        canvas.addEventListener('touchstart', startDraw);
+        canvas.addEventListener('touchmove', draw);
+        canvas.addEventListener('touchend', endDraw);
+        canvas.addEventListener('touchcancel', endDraw);
+    </script>
+</body>
+</html>

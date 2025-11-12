@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8"> <!-- 文字コードをUTF-8に設定 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- レスポンシブ対応でスマホでも見やすく -->
+    <title>正解！</title> <!-- ブラウザのタブに表示されるタイトル -->
+    <style>
+        /* ==========================
+           ページ全体のスタイル
+           ========================== */
+        body {
+            font-family: Arial, sans-serif; /* 全体のフォントをArialに設定 */
+            text-align: center;             /* テキストを中央揃え */
+            margin: 0;                      /* ページ全体の余白をゼロに設定 */
+            padding: 0;                     /* ページ全体のパディングをゼロに設定 */
+            background: url('正解.png') no-repeat center center fixed; /* 背景画像を中央・固定で表示 */
+            background-size: cover;         /* 背景画像を画面いっぱいに拡大 */
+        }
+        /* ==========================
+           タイトル（正解メッセージ）のスタイル
+           ========================== */
+        h1 {
+            color: #155724;     /* タイトルの文字色を緑に設定 */
+            margin-top: 50px;   /* 上部に余白を追加 */
+            font-size: 2em;     /* フォントサイズを大きく設定 */
+        }
+        /* ==========================
+           説明文（手に入れた文字）のスタイル
+           ========================== */
+        p {
+            color: #155724;     /* 説明文の文字色を緑に設定 */
+            font-size: 1.2em;   /* フォントサイズを少し大きく設定 */
+        }
+        /* ==========================
+           閉じるボタンのスタイル
+           ========================== */
+        .close-button {
+            margin-top: 30px;           /* 上部に余白を追加 */
+            padding: 10px 20px;         /* ボタン内の余白を設定 */
+            font-size: 1em;             /* フォントサイズを設定 */
+            color: #fff;                /* ボタンの文字色を白に設定 */
+            background-color: #6c757d;  /* ボタンの背景色をグレーに設定 */
+            border: none;               /* ボーダーを削除 */
+            border-radius: 5px;         /* ボタンの角を丸くする */
+            cursor: pointer;            /* カーソルをポインタに変更 */
+        }
+        /* ==========================
+           閉じるボタンのホバー時のスタイル
+           ========================== */
+        .close-button:hover {
+            background-color: #495057;  /* ホバー時の背景色を濃いグレーに変更 */
+        }
+        /* ==========================
+           吹き出しメッセージのスタイル
+           ========================== */
+        .balloon {
+            display: flex;
+            flex-direction: column;
+            align-items: center;      /* 中央揃え */
+            justify-content: center;  /* 中央揃え */
+            margin: 16px 0;
+            position: relative;
+        }
+        .balloon-text {
+            position: relative;
+            background: rgba(255,255,255,0.95);
+            color: #155724;
+            padding: 18px 28px;
+            border-radius: 24px;
+            font-size: 1.4em;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.10);
+            max-width: 32em; /* 文字量に合わせて幅を制限 */
+            min-width: 10em;
+            display: inline-block;
+            text-align: left;
+            word-break: break-word;
+        }
+        .balloon-text::after {
+            content: "";
+            position: absolute;
+            left: 50%;
+            bottom: -24px;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border: 12px solid transparent;
+            border-top: 16px solid rgba(255,255,255,0.95);
+        }
+        .balloon-img-left-bottom {
+            position: absolute;
+            left: -60px;   /* 吹き出しの左下に配置（数値は調整可） */
+            bottom: -20px; /* 吹き出しの下に少しはみ出す */
+            width: 80px;
+            height: auto;
+            z-index: 2;
+        }
+        .balloon-img-under {
+            width: 250px;   /* 画像を大きく */
+            height: auto;
+            margin-top: 8px;
+        }
+    </style>
+</head>
+<body>
+    <!-- 正解メッセージ -->
+    <h1 id="main-message">正解だよ！</h1>
+    <!-- 吹き出しメッセージ -->
+    <div class="balloon" style="display: flex; flex-direction: column; align-items: center; justify-content: center; margin: 16px 0;">
+        <div class="balloon-text" id="balloon-text">
+            正解だね！おめでとう！<br>
+        </div>
+        <img src="びっくり.png" alt="びっくりキャラ" class="balloon-img-under" id="balloon-img">
+    </div>
+    <!-- 閉じるボタン -->
+    <div style="margin-top: 48px;">
+     <button class="close-button" onclick="goToTitle()">閉じる</button>
+     <button class="close-button" onclick="goToExplanation()" style="margin-left: 12px;">解説を見る</button>
+    </div>
+    <script>
+    // メッセージ切り替え
+    setTimeout(function() {
+        document.getElementById('main-message').style.display = 'none';
+        document.getElementById('balloon-text').innerHTML = '何かゲットしたよ！<br>『縦１.攻撃すること』<br>『縦２.赤い宝石』<br>これはクロスワードのヒントかな？';
+        // 画像も切り替え
+        const img = document.getElementById('balloon-img');
+        img.src = "はてな.png";
+        img.alt = "はてなキャラ";
+    }, 2000); // 2秒後に切り替え
+
+    function goToTitle() {
+        // メモを完全に削除
+        localStorage.clear(); // すべてのローカルストレージデータを削除
+        // もしくは特定のメモだけを削除する場合は：
+        // localStorage.removeItem('memo');
+        
+        // タイトルページへ移動
+        window.location.href = "index.html";
+    }
+
+    function goToExplanation() {
+        window.location.href = "explanation.html"; // ← 実際のファイル名にあわせて調整
+    }
+    </script>
+</body>
+</html>

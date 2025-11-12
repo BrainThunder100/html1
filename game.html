@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>謎解きゲーム - ゲーム画面</title>
+    <!-- 共通のスタイルシートを読み込み -->
+    <link rel="stylesheet" href="CSS/sample.css">
+    <style>
+        /* 
+            body
+            背景画像を教室に設定し、画面全体にカバーさせます。
+        */
+        body {
+            background: url('教室.png') no-repeat center center fixed;
+            background-size: cover;
+        }
+        /* 
+            .game-container
+            ゲーム画面の各要素（問題文・入力欄・ボタンなど）を縦に中央揃えでまとめるラッパーです。
+            min-height: 100vh; で画面の高さいっぱいにし、中央に配置します。
+        */
+        .game-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;      /* X軸中央揃え */
+            justify-content: flex-start;
+            min-height: 100vh;
+            /* ↓ 画面の上から1/6くらい下げて中央より上に */
+            padding-top: 8vh;
+        }
+        /* 
+            .game-description
+            ゲームの説明文用。大きめの文字で下に余白をつけます。
+        */
+        .game-description {
+            font-size: 2em;
+            margin-bottom: 32px;
+        }
+        /* 
+            .question-area
+            問題文と画像をまとめるエリア。幅を揃えて中央寄せにします。
+        */
+        .question-area {
+            width: 100%;
+            max-width: 1000px;   /* 画像の最大幅 */
+            margin: 0 auto;
+            text-align: center;
+        }
+        /* 
+            .question
+            問題文のスタイル。大きく太字で、色も指定できます。
+        */
+        .question {
+            font-size: 2.5em;    /* 文字を大きく */
+            font-weight: bold;
+            color: #fff;
+            text-align: left;         /* テキストは左揃え */
+            margin-bottom: 32px;
+            width: 100%;
+            max-width: 700px;    /* ← ここでテキストだけ横幅を指定 */
+            margin-left: auto;
+            margin-right: auto;
+            box-sizing: border-box;
+            font-family: 'HGMaruGothicMPRU', 'ＨＧ丸ｺﾞｼｯｸＭ', 'Hiragino Maru Gothic ProN', 'Arial', sans-serif;
+            text-shadow:
+                -2px -2px 0 #000,
+                 2px -2px 0 #000,
+                -2px  2px 0 #000,
+                 2px  2px 0 #000;
+        }
+        .question-image {
+            display: block;
+            width: 100%;
+            height: auto;
+            margin: 0 auto 32px auto; /* 画像を中央に */
+        }
+        /* 
+            .answer-input
+            回答入力欄のスタイル。大きめの文字と余白で入力しやすくしています。
+        */
+        .answer-input {
+            font-size: 2em;
+            padding: 12px 24px;
+            width: 300px;
+            margin-bottom: 24px;
+            margin-top: 0;
+        }
+        /* 
+            .submit-button
+            送信ボタンのスタイル。大きめで押しやすく、下に余白もつけています。
+        */
+        .submit-button {
+            background: none;
+            border: none;
+            padding: 0;
+            margin-bottom: 32px;
+            cursor: pointer;
+            margin-top: 16px; /* ボタン上に余白を追加 */
+        }
+        .submit-button img {
+            width: 120px;   /* 横幅を大きく */
+            height: 64px;   /* 縦はそのまま */
+            vertical-align: middle;
+            transition: filter 0.2s;
+        }
+        .submit-button img:hover {
+            filter: brightness(0.8);
+        }
+        /* 
+            .hint-area
+            ヒントボタンを下に余白をつけて配置します。
+        */
+        .hint-area {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            max-width: 1000px;
+            margin: 24px auto 0 auto;
+        }
+        /* 
+            .hint-button
+            ヒントボタンの見た目を整えます。背景や枠線を消し、画像のみ表示します。
+        */
+        .hint-button {
+            font-size: 1.2em;
+            padding: 0;
+            background: none;   /* 背景色なし */
+            border: none;       /* 枠線なし */
+        }
+        /* 
+            .hint-button img
+            ヒントボタン内の虫眼鏡画像のサイズやホバー時のエフェクトを指定します。
+        */
+        .hint-button img {
+            width: 48px;
+            height: 48px;
+            vertical-align: middle;
+            transition: filter 0.2s;
+        }
+        .hint-button img:hover {
+            filter: brightness(0.8);
+        }
+        /* 
+            .hint-button:active
+            ヒントボタンをクリックしたときの背景色や丸みを指定します。
+        */
+        .hint-button:active {
+            background: rgb(255, 255, 0); /* クリック時に背景色を表示 */
+            border-radius: 50%; /* 丸くする場合 */
+        }
+
+        /* メモ機能 */
+        .memo-area {
+            max-width: 700px;
+            margin: 32px auto;
+        }
+        .memo-area label {
+            font-size: 1.2em;
+            color: #fff;
+            text-shadow: 1px 1px 2px #000;
+        }
+        .memo-area textarea {
+            width: 100%;
+            font-size: 1.2em;
+            box-sizing: border-box;
+        }
+        .memo-area button {
+            margin-top: 8px;
+            font-size: 1em;
+        }
+
+        /* スマートフォン用のスタイル */
+        @media (max-width: 700px) {
+            .question {
+                font-size: 1.3em;
+                margin-left: 1em;
+                max-width: 95vw;
+
+                /* スマホでは複数影を消して見やすくする */
+                text-shadow: none;
+
+                /* 読みやすさ向上のため半透明背景と余白を追加 */
+                background: rgba(0, 0, 0, 0.45);
+                padding: 10px 12px;
+                border-radius: 8px;
+                box-sizing: border-box;
+            }
+
+            /* 小さい画面で画像や入力欄がはみ出さないように調整（必要なら残す） */
+            .question-image {
+                max-width: 95vw;
+                height: auto;
+            }
+
+            .answer-input {
+                width: 90%;
+                font-size: 1.4em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 
+        .game-container
+        ゲーム画面の全要素を中央にまとめるラッパー
+    -->
+    <div class="game-container">
+
+        <!-- 問題文 -->
+        <div class="question-area">
+            <div class="question">
+                Aさん、Sさん、Tさん、Rさんの中で３人は正直者で、１人が嘘つきです。<br>
+                嘘つきは誰でしょう？
+            </div>
+            <img src="噓つき誰.png" class="question-image" alt="嘘つきは誰？">
+        </div>
+
+        <!-- 回答入力欄 -->
+        <input type="text" class="answer-input" id="answer" placeholder="答えを入力">
+
+        <!-- 送信ボタン -->
+        <button class="submit-button" onclick="checkAnswer()">
+            <img src="送信.png" alt="送信">
+        </button>
+
+        <!-- ヒント・メモボタンエリア -->
+        <div class="hint-area" style="display: flex; justify-content: space-between; align-items: flex-start; max-width: 1000px; margin: 24px auto 0 auto;">
+            <!-- メモボタン（左端） -->
+            <a class="hint-button" href="memo.html" target="_blank" rel="noopener noreferrer" style="margin-left:0;">
+                <img src="メモ.png" alt="メモを開く" style="width:72px; height:72px;">
+            </a>
+            <!-- ヒントボタン（右端） -->
+            <a class="hint-button" href="hint.html" target="_blank" rel="noopener noreferrer" style="margin-right:0;">
+                <img src="虫眼鏡.png" alt="ヒントを見る" style="width:48px; height:48px;">
+            </a>
+        </div>
+
+        <!-- メモエリアはそのまま -->
+        <div class="memo-area" id="memo-area" style="display:none; max-width:700px; margin:32px auto;">
+            <label for="memo" style="font-size:1.2em; color:#fff; text-shadow:1px 1px 2px #000;">メモ：</label><br>
+            <textarea id="memo" rows="5" style="width:100%; font-size:1.2em; box-sizing:border-box;"></textarea>
+            <button onclick="saveMemo()" style="margin-top:8px; font-size:1em;">保存</button>
+        </div>
+    </div>
+
+    <script>
+        // ==========================
+        // 全角数字を半角数字に変換する関数
+        // 入力された数字が全角でも正しく判定できるようにします
+        // ==========================
+        function toHankaku(str) {
+            return str.replace(/[０-９]/g, function(s) {
+                return String.fromCharCode(s.charCodeAt(0) - 0xFEE0);
+            });
+        }
+
+        // ==========================
+        // 回答をチェックする関数
+        // 入力値を取得し、正解ならcorrect.html、不正解ならincorrect.htmlに遷移します
+        // ==========================
+        function checkAnswer() {
+            const answer = document.getElementById('answer').value.trim();
+            // 「Aさん」「Ａさん」「aさん」「ａさん」など全角・半角・大文字小文字対応
+            // 「さん」なしでもOKにする
+            const normalized = answer
+                .replace(/[ＡAａa]/gi, 'A') // 全角・半角A/aをAに統一
+                .replace(/[ＲRｒr]/gi, 'R')
+                .replace(/[ＳSｓs]/gi, 'S')
+                .replace(/[ＴTｔt]/gi, 'T')
+                .replace(/[　\s]/g, '')     // 全角・半角スペース削除
+                .replace(/さん/gi, '');    // 「さん」を削除
+
+            if (normalized === "A") {
+                location.href = "correct.html";
+            } else if (
+                normalized === "R" ||
+                normalized === "S" ||
+                normalized === "T"
+            ) {
+                location.href = "incorrect.html";
+            } else {
+                // それ以外の入力は不正解ページへ
+                location.href = "incorrect.html";
+            }
+        }
+
+        // ==========================
+        // メモ保存・復元機能
+        // ==========================
+        window.addEventListener('DOMContentLoaded', function() {
+            const memo = localStorage.getItem('memo');
+            if (memo !== null) {
+                document.getElementById('memo').value = memo;
+            }
+        });
+        function saveMemo() {
+            const memo = document.getElementById('memo').value;
+            localStorage.setItem('memo', memo);
+            alert('メモを保存しました');
+        }
+
+        // ==========================
+        // メモ表示/非表示トグル
+        // ==========================
+        function toggleMemo() {
+            const memoArea = document.getElementById('memo-area');
+            const btn = document.getElementById('toggle-memo-btn');
+            if (memoArea.style.display === "none") {
+                memoArea.style.display = "block";
+                btn.textContent = "メモを閉じる";
+            } else {
+                memoArea.style.display = "none";
+                btn.textContent = "メモを開く";
+            }
+        }
+    </script>
+</body>
+</html>

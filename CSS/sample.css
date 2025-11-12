@@ -1,0 +1,269 @@
+/* 
+  body
+  ページ全体のテキストを中央揃えにします。
+  ゲーム画面やタイトル画面など、全ページ共通で中央寄せにするための指定です。
+*/
+body {
+    text-align: center;
+}
+
+/* 
+  .character-area
+  キャラクター画像と吹き出しを中央に大きめに配置するためのスタイルです。
+  display: flex; で横並びにし、flex-direction: row; で「吹き出しが左・画像が右」になるようにしています。
+  align-items: flex-end; で下揃え、justify-content: center; で中央寄せ。
+  gap: 20px; で画像と吹き出しの間を広げています。
+  margin-top: 80px; で上に余白を追加しています。
+*/
+.character-area {
+    display: flex;              /* 横並びにする */
+    flex-direction: row;        /* 吹き出し→画像の順（吹き出しが左、画像が右） */
+    align-items: flex-end;      /* 下揃え */
+    justify-content: center;    /* 横方向中央寄せ */
+    margin-top: 80px;           /* 上に余白を増やす */
+    gap: 20px;  
+}
+
+/* 
+  .game-container
+  ゲーム画面の各要素（問題文・入力欄・ボタンなど）を縦に中央揃えでまとめるラッパーです。
+  min-height: 100vh; で画面の高さいっぱいにし、中央に配置します。
+*/
+.game-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh; /* 画面の縦中央に配置 */
+}
+
+/* 
+  .answer-input, .submit-button
+  回答入力欄と送信ボタンの間に余白をつけて、見やすくしています。
+*/
+.answer-input, .submit-button {
+    margin-top: 16px;
+}
+
+/* 
+  .door-img-left, .door-img-right
+  タイトル画面のドア画像を左右にずらして中央に重ねて表示します。
+  z-index: 2; でタイトル文字より下に表示されます。
+*/
+.door-img-left {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-100%, -50%); /* 中央より左にずらす */
+    z-index: 2;
+}
+.door-img-right {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(0%, -50%);    /* 中央より右にずらす */
+    z-index: 2;
+}
+
+/* 
+  .hint-area
+  ヒントボタンを画面右上に固定表示するためのスタイルです。
+  text-align: right; で複数ボタンがあっても右寄せになります。
+  z-index: 200; で他の要素より前面に表示します。
+  margin: 0; で余計な余白を消しています。
+*/
+.hint-area {
+    position: fixed;
+    top: 24px;
+    right: 24px;
+    text-align: right;
+    z-index: 200;
+    margin: 0;
+}
+.hint-area img {
+    width: 220px;  /* ここも同じ値に */
+    height: auto;
+    margin-right: 24px;
+}
+
+/* 
+  .hint-button
+  ヒントボタンの見た目を整えます。
+  display: inline-block; で横並びも可能。
+  text-decoration: none; で下線を消し、ボタン風にします。
+  transition: background 0.3s; でホバー時の色変化をなめらかにします。
+*/
+.hint-button {
+    padding: 10px 24px;
+    font-size: 1em;
+    background-color: #ffc107;
+    color: #222;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s;
+    text-decoration: none;
+    display: inline-block;
+}
+.hint-button:hover {
+    background-color: #ff9800;
+    color: #fff;
+}
+
+/* 
+  .hint-message
+  ヒント内容の表示エリアです。
+  display: inline-block; で横幅を内容に合わせて調整。
+  margin-top: 8px; でボタンとの間に余白をつけています。
+*/
+.hint-message {
+    background: #fffbe6;
+    border: 1px solid #ffe082;
+    border-radius: 8px;
+    padding: 16px;
+    color: #795548;
+    font-size: 1.1em;
+    margin-top: 8px;
+    display: inline-block;
+}
+
+/* 
+  .door-left, .door-right
+  タイトルの左右パーツ。アニメーション用にtransitionを設定。
+  display: inline-block; で横並びにしやすくしています。
+*/
+.door-left, .door-right {
+    display: inline-block;
+    transition: transform 1.2s cubic-bezier(.77,0,.18,1), opacity 0.5s;
+}
+
+/* 
+  .door-open .door-left, .door-open .door-right
+  ドアが開くアニメーション。左右のタイトルが外側にスライド＆回転して消えます。
+*/
+.door-open .door-left {
+    transform: translateX(-120%) rotateY(40deg);
+    opacity: 0;
+}
+.door-open .door-right {
+    transform: translateX(120%) rotateY(-40deg);
+    opacity: 0;
+}
+
+/* 
+  .door-img-bg
+  ドア画像の背景部分のスタイルです。
+  transitionを設定し、アニメーション時にスムーズに変化するようにします。
+*/
+.door-img-bg {
+    transition: transform 1.2s cubic-bezier(.77,0,.18,1), opacity 0.5s;
+}
+
+/* 
+  .door-open .door-img-left, .door-open .door-img-right
+  ドア画像が外側にスライド＆回転して消えるアニメーションです。
+*/
+.door-open .door-img-left {
+    transform: translateY(-50%) translateX(-120%) rotateY(-40deg);
+    opacity: 0;
+}
+.door-open .door-img-right {
+    transform: translateY(-50%) translateX(120%) rotateY(40deg);
+    opacity: 0;
+}
+
+/* 
+  .door-open .door-title
+  ドアが開くとき、メインタイトルの文字も一緒にフェードアウトします。
+*/
+.door-open .door-title {
+    opacity: 0;
+    transition: opacity 0.8s;
+}
+
+/* 
+  .hidden / .show
+  要素の表示・非表示を切り替えるクラスです。
+  .hiddenはopacity: 0; pointer-events: none; で非表示＆操作不可。
+  .showはopacity: 1; pointer-events: auto; で表示＆操作可。
+  transitionでフェードイン・アウトをなめらかにします。
+*/
+.hidden {
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.8s;
+}
+.show {
+    opacity: 1;
+    pointer-events: auto;
+    transition: opacity 0.8s;
+}
+
+/* 
+  @keyframes fadeIn
+  透明から不透明に変化するアニメーションの定義です。
+  吹き出しやキャラクター画像の表示時に使われます。
+*/
+@keyframes fadeIn {
+    0% { opacity: 0;}
+    100% { opacity: 1;}
+}
+/* 
+  .question
+  問題文エリアのスタイルです。
+  margin-left: 10vw; で左に10%の余白を追加し、中央揃えのテキストを少し右にずらします。
+  align-self: flex-start; で縦方向は上に揃えます。
+*/
+.question {
+    margin-left: 10vw;
+    align-self: flex-start;
+}
+/* スマートフォン向けの共通設定 */
+@media screen and (max-width: 768px) {
+    .door-img-bg {
+        max-width: 45%;
+        height: auto;
+    }
+
+    .phantom {
+        width: 120px;
+    }
+
+    .door-title,
+    .game-description,
+    .question,
+    .hint-message {
+        font-size: 1.2rem;
+        text-align: center;
+        padding: 0 10px;
+    }
+
+    .answer-input {
+        width: 80%;
+        max-width: 300px;
+    }
+
+    .submit-button,
+    .hint-button {
+        width: 80%;
+        max-width: 200px;
+    }
+}
+
+/* さらに小さい画面向け */
+@media screen and (max-width: 480px) {
+    .door-img-bg {
+        max-width: 48%;
+    }
+
+    .phantom {
+        width: 100px;
+    }
+
+    .door-title,
+    .game-description,
+    .question,
+    .hint-message {
+        font-size: 1rem;
+    }
+}

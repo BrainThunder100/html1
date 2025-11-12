@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8"> <!-- 文字コードをUTF-8に設定 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- レスポンシブ対応 -->
+    <title>不正解</title> <!-- ページタイトル -->
+    <style>
+        /* ページ全体のスタイル */
+        body {
+            font-family: Arial, sans-serif; /* フォントをArialに設定 */
+            text-align: center; /* テキストを中央揃え */
+            margin: 0; /* ページ全体の余白をゼロに設定 */
+            padding: 0; /* ページ全体のパディングをゼロに設定 */
+            /* 背景画像を設定 */
+            background: url('不正解.jpg') no-repeat center center fixed;
+            background-size: cover;
+        }
+        /* タイトルのスタイル */
+        h1 {
+            color: #ffffff; /* タイトルの文字色を赤系に設定 */
+            margin-top: 50px; /* 上部に余白を追加 */
+            font-size: 2em; /* フォントサイズを大きく設定 */
+        }
+        /* 説明文のスタイル */
+        p {
+            color: #ffffff; /* 説明文の文字色を赤系に設定 */
+            font-size: 1.2em; /* フォントサイズを少し大きく設定 */
+        }
+        /* 戻るボタンのスタイル */
+        button {
+            margin-top: 30px; /* 上部に余白を追加 */
+            padding: 10px 20px; /* ボタン内の余白を設定 */
+            font-size: 1em; /* フォントサイズを設定 */
+            color: #fff; /* ボタンの文字色を白に設定 */
+            background-color: #dc3545; /* ボタンの背景色を赤に設定 */
+            border: none; /* ボーダーを削除 */
+            border-radius: 5px; /* ボタンの角を丸くする */
+            cursor: pointer; /* カーソルをポインタに変更 */
+        }
+        /* ボタンのホバー時のスタイル */
+        button:hover {
+            background-color: #a71d2a; /* ホバー時の背景色を濃い赤に変更 */
+        }
+        /* 吹き出しメッセージのスタイル */
+        .balloon {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin: 16px 0;
+            position: relative;
+        }
+        .nayamu-img {
+            width: 80px;
+            height: auto;
+            margin-right: -18px; /* 吹き出しと重なるように調整 */
+            z-index: 2;
+            position: relative;
+        }
+        .balloon-text {
+            position: relative;
+            background: rgba(255,255,255,0.9);
+            color: #333;
+            padding: 20px 32px;
+            border-radius: 24px;
+            font-size: 1.2em;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+            max-width: 80vw;
+            text-align: left;
+            margin-left: -12px; /* 画像と吹き出しを近づける */
+            z-index: 1;
+        }
+        .balloon-text::after {
+            content: "";
+            position: absolute;
+            left: 50%;
+            bottom: -24px;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border: 12px solid transparent;
+            border-top: 16px solid rgba(255,255,255,0.95);
+        }
+        /* 既存の .balloon-img-under を利用 */
+        .balloon-img-under {
+            width: 250px;   /* 画像をさらに大きく */
+            height: auto;
+            margin-top: 8px;
+        }
+    </style>
+</head>
+<body>
+    <!-- 不正解メッセージ -->
+    <h1>不正解だ～</h1>
+    <!-- 吹き出しメッセージ -->
+    <div class="balloon">
+        <div class="balloon-text" id="balloon-text">
+            残念！もう一度考えてみてね。<br>
+            ヒントやメモも活用しよう！
+        </div>
+        <img src="悩む.png" alt="悩むキャラ" class="balloon-img-under">
+    </div>
+    <!-- 戻るボタン -->
+    <div style="margin-top: 32px;">
+        <button onclick="location.href='game.html'" style="font-size:1.3em; padding:10px 24px; border-radius:8px; border:none; background:#444; color:#fff; cursor:pointer;">
+            戻る
+        </button>
+    </div>
+</body>
+</html>

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>解説ページ</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f9f9f9;
+            padding: 20px;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 30px;
+        }
+
+        .image-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+         .image-grid p {
+            font-size: 1.3rem;  /* ここを追加 */
+            margin-bottom: 8px;
+        }
+
+        .image-grid img {
+            width: 100%;
+            height: auto;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+         body > p {
+            font-size: 1.2rem;  /* ここを追加 */
+        }
+
+         button {
+            margin-top: 40px;
+            padding: 10px 20px;
+            font-size: 1.1rem;  /* ここを追加 */
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+        
+    </style>
+</head>
+<body>
+
+    <h1>解説</h1>
+
+    <div class="image-grid">
+        <p>嘘つきがRさんとしたら</p>
+        <img src="嘘はR.png" alt="解説画像1">
+        <p>嘘つきがTさんとしたら</p>
+        <img src="嘘はT.png" alt="解説画像2">
+        <p>嘘つきがSさんとしたら</p>
+        <img src="嘘はS.png" alt="解説画像3">
+         <p>嘘つきがAさんとしたら</p>
+        <img src="嘘はA.png" alt="解説画像4">
+    </div>
+    <img src="犯人.png" alt="Aさんが嘘つき" style="width: 300px; margin-top: 20px;">
+<p>嘘は1つだけなのでAさんが嘘つき</p>
+<!-- collectに戻るボタン -->
+<button onclick="goToCollect()" style="margin-top: 40px; padding: 10px 20px; font-size: 1em; background-color: #007bff; color: white; border: none; border-radius: 6px; cursor: pointer;">
+    戻る
+</button>
+
+<script>
+    function goToCollect() {
+        window.location.href = "correct.html"; // ← ページ名は必要に応じて変更
+    }
+</script>
+</body>
+</html>
